@@ -1,0 +1,41 @@
+import { v4 as uuidv4 } from "uuid";
+import { createPrice, createQuantity, createStockLevel } from "./src/domain/product/factories.ts";
+import { notify, subscribe } from "./src/infrastructure/observers/observer.ts";
+import { emailObserver } from "./src/infrastructure/observers/emailobserver.ts";
+import { databaseObserver } from "./src/infrastructure/observers/databaseobserver.ts";
+// Subscribe observers
+subscribe(emailObserver);
+subscribe(databaseObserver);
+try {
+    // Create a product
+    const product = {
+        id: uuidv4(),
+        name: "Shoes",
+        price: createPrice(100),
+        stock: createStockLevel(10),
+    };
+    console.log("Product created:", product);
+    // Reduce stock
+    const quantity = createQuantity(3);
+    const newStock = createStockLevel(product.stock - quantity);
+    const updatedProduct = {
+        ...product,
+        stock: newStock,
+    };
+    console.log("Stock updated:", updatedProduct);
+    // Emit domain event
+    notify({
+        type: "StockReduced",
+        productId: updatedProduct.id,
+        quantity,
+        newLevel: updatedProduct.stock,
+    });
+}
+catch (error) {
+    if (error instanceof Error) {
+        console.error("Error:", error.message);
+    }
+    else {
+        console.error("Unknown error");
+    }
+}

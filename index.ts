@@ -1,3 +1,17 @@
+import express from "express"
+
+const app = express()
+
+app.get("/", (req, res) => {
+  res.send("DDD Observer App Running ")
+})
+
+const PORT = process.env.PORT || 3000
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
+
 
 import { v4 as uuidv4 } from "uuid"
 
