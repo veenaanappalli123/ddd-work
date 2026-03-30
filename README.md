@@ -1,4 +1,4 @@
-# Strong Typing in TypeScript for robust domain-driven design
+# Strong Typing in TypeScript for robust domain-driven designnnnnnn
 
 ## PREVIOUS KNOWLEDGE
 
